@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: './backend'
+      target: base
+    command: 'air -c .air.toml'
+    env_file: './.env'
+    ports:
+      - 5000:5000
+    volumes:
+      - ./backend:/app/go/base
+  front:
+    build:
+      context: './frontend'
+      target: base
+    command: 'yarn dev'
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app/js/base
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
