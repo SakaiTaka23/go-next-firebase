@@ -33,7 +33,9 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const setToken = async () => {
       const token = await firebaseUser()?.getIdToken();
-      localStorage.setItem('token', token);
+      if (token !== undefined) {
+        localStorage.setItem('token', token);
+      }
     };
     setToken();
   }, [firebaseUser]);
