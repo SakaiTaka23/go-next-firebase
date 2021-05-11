@@ -1,24 +1,18 @@
-import { useEffect, useState } from 'react';
-
-type Response = {
-  message: string;
-};
+import { useContext } from 'react';
+import { AuthContext } from '../hooks/firebase/useFirebase';
 
 const Home = () => {
-  const [message, setMessage] = useState('');
+  const { user, isLoading } = useContext(AuthContext);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  if (isLoading) {
+    return <h1>loading</h1>;
+  }
 
-  const fetchData = async () => {
-    const response = await fetch('http://127.0.0.1:5000/', {});
-    const content: Response = await response.json();
-    console.log(content);
-    setMessage(content.message);
-  };
-
-  return <h1>{message}</h1>;
+  return (
+    <div>
+      <pre>{user ? user.displayName + 'でログインしています' : 'ログインしていません'}</pre>
+    </div>
+  );
 };
 
 export default Home;
