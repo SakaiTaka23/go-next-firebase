@@ -5,6 +5,7 @@ type AuthContextState = {
   user: firebase.User;
   isLoading: boolean;
   firebaseAuth: firebase.auth.Auth;
+  Logout: () => void;
 };
 
 const AuthContext = createContext({} as AuthContextState);
@@ -37,7 +38,13 @@ const AuthProvider = ({ children }) => {
     setToken();
   }, [firebaseUser]);
 
-  return <AuthContext.Provider value={{ user, isLoading, firebaseAuth }}>{children}</AuthContext.Provider>;
+  const Logout = () => {
+    firebaseAuth.signOut().then(() => {
+      window.location.reload();
+    });
+  };
+
+  return <AuthContext.Provider value={{ user, isLoading, firebaseAuth, Logout }}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthProvider, firebase };
