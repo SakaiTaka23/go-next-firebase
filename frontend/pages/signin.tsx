@@ -1,7 +1,8 @@
 import React from 'react';
+import AuthLinks from '../components/organisms/AuthLinks';
 
 const signin = () => {
-  return <div>signin</div>;
+  return <AuthLinks />;
 };
 
 export default signin;

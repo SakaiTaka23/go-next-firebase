@@ -1,8 +1,8 @@
 import React from 'react';
+import AuthLinks from '../components/organisms/AuthLinks';
 
 const signup = () => {
-  // 登録
-  return <div>signup</div>;
+  return <AuthLinks />;
 };
 
 export default signup;
