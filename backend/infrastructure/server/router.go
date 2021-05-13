@@ -1,6 +1,8 @@
 package server
 
 import (
+	"backend/infrastructure/middleware"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -24,7 +26,8 @@ func SetRouter(app *fiber.App) *fiber.App {
 		})
 	})
 
-	app.Get("/private", func(c *fiber.Ctx) error {
+	private := app.Group("/", middleware.AuthMiddleware)
+	private.Get("/private", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message": "Private",
 		})
