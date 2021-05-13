@@ -2,6 +2,7 @@ package server
 
 import (
 	"backend/infrastructure/middleware"
+	"backend/injector"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,6 +28,8 @@ func SetRouter(app *fiber.App) *fiber.App {
 		})
 	})
 
+	userHandler := injector.InjectUserHandler()
+
 	private := app.Group("/", middleware.AuthMiddleware)
 	private.Get("/private", func(c *fiber.Ctx) error {
 		log.Println(c.Locals("user"))
@@ -35,7 +38,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 		})
 	})
 
-	// private.Get("/login-check", handler.UserHandler.CheckLoginUser)
+	private.Get("/login-check", userHandler.CheckLoginUser)
 
 	return app
 }
