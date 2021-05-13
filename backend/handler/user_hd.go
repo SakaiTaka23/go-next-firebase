@@ -17,7 +17,7 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return userHandler
 }
 
-func CheckLoginUser(c *fiber.Ctx) error {
+func (handler *UserHandler) CheckLoginUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	log.Println(user)
 	return c.JSON(fiber.Map{
