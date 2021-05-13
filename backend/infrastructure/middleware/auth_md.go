@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"backend/entity/model"
 	"context"
 	"fmt"
-	"log"
 	"strings"
 
 	firebase "firebase.google.com/go"
@@ -31,6 +31,19 @@ func AuthMiddleware(c *fiber.Ctx) error {
 		fmt.Printf("error verifying ID token: %v\n", err)
 		return c.Status(401).SendString("error verifying ID token")
 	}
-	log.Printf("Verified ID token: %v\n", token)
+	// log.Printf("Verified ID token: %v\n", token)
+
+	id := token.UID
+	name := token.Claims["name"].(string)
+	emails := token.Firebase.Identities["email"].([]interface{})
+	email := emails[0].(string)
+
+	user := model.User{
+		ID:    id,
+		Name:  name,
+		Email: email,
+	}
+	c.Locals("user", user)
+
 	return c.Next()
 }
