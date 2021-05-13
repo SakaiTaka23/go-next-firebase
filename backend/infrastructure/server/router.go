@@ -1,6 +1,7 @@
 package server
 
 import (
+	"backend/handler"
 	"backend/infrastructure/middleware"
 	"log"
 
@@ -34,6 +35,8 @@ func SetRouter(app *fiber.App) *fiber.App {
 			"message": "Private",
 		})
 	})
+
+	private.Get("/login-check", handler.CheckLoginUser)
 
 	return app
 }
