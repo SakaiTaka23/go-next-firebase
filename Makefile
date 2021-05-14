@@ -1,3 +1,5 @@
+include .env
+
 COMPOSE = docker compose
 UP = $(COMPOSE) up
 RUN_BACK = $(COMPOSE) run back
@@ -14,12 +16,12 @@ db:
 build:
 	$(COMPOSE) build
 
-env:
+.env:
 	cp .env.example .env
 yarn_install:
 	$(RUN_FRONT) yarn install
 tidy:
 	$(RUN_BACK) go mod tidy
 
-mysql: .env
+mysql:
 	docker-compose exec db bash -c 'mysql -u $(DB_USERNAME) -p$(DB_PASSWORD) $(DB_DATABASE)'
