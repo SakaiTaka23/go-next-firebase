@@ -12,6 +12,7 @@ func SetFrameworkMiddleware(app *fiber.App) *fiber.App {
 		AllowHeaders: "Authorization",
 	}))
 
+	app.Use(ZapMiddleware)
 
 	return app
 }
