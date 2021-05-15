@@ -9,6 +9,7 @@ import (
 )
 
 func SetRouter(app *fiber.App) *fiber.App {
+	middleware.SetAppMiddleware(app)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
