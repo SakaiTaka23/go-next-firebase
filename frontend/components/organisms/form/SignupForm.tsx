@@ -41,7 +41,7 @@ const SignupForm = () => {
 
   const submit = (data: MailPasswordRequest) => {
     console.log(data);
-    //Signup(data.email, data.password);
+    Signup(data.email, data.password, data.name);
   };
 
   return (
