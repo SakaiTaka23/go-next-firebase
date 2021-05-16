@@ -7,6 +7,7 @@ type AuthContextState = {
   firebaseAuth: firebase.auth.Auth;
   Logout: () => void;
   Signup: (email: string, password: string, username: string) => Promise<void>;
+  Signin: (email: string, password: string) => Promise<void>;
 };
 
 const AuthContext = createContext({} as AuthContextState);
@@ -51,18 +52,17 @@ const AuthProvider = ({ children }) => {
     await firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        firebaseUser()
-          .updateProfile({
-            displayName: username,
-          })
-          .then(
-            function () {
-              // Update successful.
-            },
-            function (error) {
-              // An error happened.
-            }
-          );
+        firebaseUser().updateProfile({
+          displayName: username,
+        });
+        // .then(
+        //   function () {
+        //     // Update successful.
+        //   },
+        //   function (error) {
+        //     // An error happened.
+        //   }
+        // );
       })
       .catch((error) => {
         // Handle Errors here.
@@ -77,8 +77,16 @@ const AuthProvider = ({ children }) => {
       });
   };
 
+  const Signin = async (email: string, password: string) => {
+    await firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
+      alert(error);
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, firebaseAuth, Logout, Signup }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, isLoading, firebaseAuth, Logout, Signup, Signin }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
