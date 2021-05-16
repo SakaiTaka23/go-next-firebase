@@ -6,6 +6,7 @@ type AuthContextState = {
   isLoading: boolean;
   firebaseAuth: firebase.auth.Auth;
   Logout: () => void;
+  Signup: (email: string, password: string, username: string) => Promise<void>;
 };
 
 const AuthContext = createContext({} as AuthContextState);
@@ -46,7 +47,39 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  return <AuthContext.Provider value={{ user, isLoading, firebaseAuth, Logout }}>{children}</AuthContext.Provider>;
+  const Signup = async (email: string, password: string, username: string) => {
+    await firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        firebaseUser()
+          .updateProfile({
+            displayName: username,
+          })
+          .then(
+            function () {
+              // Update successful.
+            },
+            function (error) {
+              // An error happened.
+            }
+          );
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+      });
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, isLoading, firebaseAuth, Logout, Signup }}>{children}</AuthContext.Provider>
+  );
 };
 
 export { AuthContext, AuthProvider, firebase };
