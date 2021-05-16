@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Avatar, Container, makeStyles, Typography } from '@material-ui/core';
 import { FormProvider, useForm } from 'react-hook-form';
-import EmailInput from './input/EmailInput';
-import PasswordInput from './input/PassowrdInput';
-import SubmitButton from '../molecules/SubmitButton';
+import EmailInput from '../input/EmailInput';
+import PasswordInput from '../input/PassowrdInput';
+import SubmitButton from '../../molecules/SubmitButton';
+import { AuthContext } from '../../../hooks/firebase/useFirebase';
+import NameInput from '../input/NameInput';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,12 +28,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MailPasswordForm = () => {
+type MailPasswordRequest = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+const SignupForm = () => {
   const classes = useStyles();
   const methods = useForm();
+  const { Signup } = useContext(AuthContext);
 
-  const submit = (data) => {
+  const submit = (data: MailPasswordRequest) => {
     console.log(data);
+    //Signup(data.email, data.password);
   };
 
   return (
@@ -45,6 +55,7 @@ const MailPasswordForm = () => {
         </Typography>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(submit)}>
+            <NameInput />
             <EmailInput />
             <PasswordInput />
             <SubmitButton />
@@ -55,4 +66,4 @@ const MailPasswordForm = () => {
   );
 };
 
-export default MailPasswordForm;
+export default SignupForm;
