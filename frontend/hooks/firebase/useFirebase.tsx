@@ -51,8 +51,8 @@ const AuthProvider = ({ children }) => {
   const Signup = async (email: string, password: string, username: string) => {
     await firebaseAuth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        firebaseUser().updateProfile({
+      .then((result) => {
+        result.user.updateProfile({
           displayName: username,
         });
         // .then(
