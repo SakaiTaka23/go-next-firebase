@@ -55,14 +55,19 @@ const AuthProvider = ({ children }) => {
         result.user.updateProfile({
           displayName: username,
         });
-        // .then(
-        //   function () {
-        //     // Update successful.
-        //   },
-        //   function (error) {
-        //     // An error happened.
-        //   }
-        // );
+      })
+      .then(() => {
+        firebase
+          .auth()
+          .currentUser.getIdToken(true)
+          .then((token) => {
+            console.log(token);
+            fetch('http://127.0.0.1:5000/login-check', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          });
       })
       .catch((error) => {
         // Handle Errors here.
