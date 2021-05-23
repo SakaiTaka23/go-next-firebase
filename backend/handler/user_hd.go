@@ -16,7 +16,7 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return userHandler
 }
 
-func (handler *UserHandler) CheckLoginUser(c *fiber.Ctx) error {
+func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	handler.userUsecase.ExistOrCreate(&user)
 	return c.SendStatus(200)
