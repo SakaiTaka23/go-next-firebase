@@ -6,7 +6,7 @@ import (
 )
 
 type UserUsecase interface {
-	ExistOrCreate(user *model.User)
+	CreateUser(user *model.User)
 }
 
 type userUsecase struct {
@@ -18,9 +18,6 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	return &userUsecase
 }
 
-func (usecase *userUsecase) ExistOrCreate(user *model.User) {
-	findUser := usecase.userRepo.FindFromID(user.ID)
-	if findUser.ID == "" {
-		usecase.userRepo.CreateUser(user)
-	}
+func (usecase *userUsecase) CreateUser(user *model.User) {
+	usecase.userRepo.CreateUser(user)
 }

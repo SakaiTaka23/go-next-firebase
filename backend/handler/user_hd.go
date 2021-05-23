@@ -22,6 +22,6 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	name := new(request.CreateUser)
 	_ = c.BodyParser(name)
 	user.Name = name.UserName
-	handler.userUsecase.ExistOrCreate(&user)
+	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
 }
