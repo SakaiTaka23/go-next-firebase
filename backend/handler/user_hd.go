@@ -4,6 +4,7 @@ import (
 	"backend/entity/model"
 	"backend/handler/request"
 	"backend/usecase"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,7 +21,10 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	name := new(request.CreateUser)
-	_ = c.BodyParser(name)
+	if err := c.BodyParser(name); err != nil {
+		name.UserName = "user"
+	}
+	log.Printf("recieved body: %s", name)
 	user.Name = name.UserName
 	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
