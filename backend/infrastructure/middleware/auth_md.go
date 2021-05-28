@@ -31,20 +31,11 @@ func AuthMiddleware(c *fiber.Ctx) error {
 		fmt.Printf("error verifying ID token: %v\n", err)
 		return c.Status(401).SendString("error verifying ID token")
 	}
+	c.Locals("token", token)
 
 	id := token.UID
-	name_i := token.Claims["name"]
-	name, ok := name_i.(string)
-	if !ok {
-		name = ""
-	}
-	emails := token.Firebase.Identities["email"].([]interface{})
-	email := emails[0].(string)
-
 	user := model.User{
-		ID:    id,
-		Name:  name,
-		Email: email,
+		ID: id,
 	}
 	c.Locals("user", user)
 

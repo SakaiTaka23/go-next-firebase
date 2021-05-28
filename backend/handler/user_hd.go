@@ -2,7 +2,9 @@ package handler
 
 import (
 	"backend/entity/model"
+	"backend/handler/request"
 	"backend/usecase"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,8 +18,14 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return userHandler
 }
 
-func (handler *UserHandler) CheckLoginUser(c *fiber.Ctx) error {
+func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
-	handler.userUsecase.ExistOrCreate(&user)
+	name := new(request.CreateUser)
+	if err := c.BodyParser(name); err != nil {
+		name.UserName = "user"
+	}
+	log.Printf("recieved body: %s", name)
+	user.Name = name.UserName
+	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
 }

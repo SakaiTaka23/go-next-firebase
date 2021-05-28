@@ -33,7 +33,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 		})
 	})
 
-	private.Get("/login-check", userHandler.CheckLoginUser)
+	private.Post("/create-user", userHandler.CreateUser)
 
 	return app
 }

@@ -1,5 +1,6 @@
 import firebase from './firebase';
 import { createContext, useEffect, useState } from 'react';
+import axios from 'axios';
 
 type AuthContextState = {
   user: firebase.User;
@@ -61,9 +62,10 @@ const AuthProvider = ({ children }) => {
           .auth()
           .currentUser.getIdToken(true)
           .then((token) => {
-            console.log(token);
-            fetch('http://127.0.0.1:5000/login-check', {
+            const data = JSON.stringify({ name: username });
+            axios.post('http://127.0.0.1:5000/create-user', data, {
               headers: {
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
               },
             });
