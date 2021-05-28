@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useContext } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { AuthContext, firebase } from '../../hooks/firebase/useFirebase';
@@ -17,8 +18,10 @@ const AuthLinks = () => {
           .then((token) => {
             if (isNewUser) {
               console.log(token);
-              fetch('http://127.0.0.1:5000/login-check', {
+              const data = {};
+              axios.post('http://127.0.0.1:5000/create-user', data, {
                 headers: {
+                  'Content-Type': 'application/json',
                   Authorization: `Bearer ${token}`,
                 },
               });
