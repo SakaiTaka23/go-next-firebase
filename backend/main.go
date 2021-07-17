@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/infrastructure/datastore/mysql"
+	"backend/infrastructure/logger"
 	"backend/infrastructure/server"
 
 	"github.com/gofiber/fiber/v2"
@@ -9,8 +10,12 @@ import (
 
 func main() {
 	mysql.Connect()
-	app := fiber.New()
 
+	if err := logger.SetUp(); err != nil {
+		panic(err)
+	}
+
+	app := fiber.New()
 	server.SetRouter(app)
 
 	if err := app.Listen(":5000"); err != nil {
