@@ -3,7 +3,6 @@ services:
   back:
     build:
       context: './backend'
-      target: base
     command: 'air -c .air.toml'
     env_file: './.env'
     ports:
@@ -13,7 +12,6 @@ services:
   front:
     build:
       context: './frontend'
-      target: base
     command: 'yarn dev'
     ports:
       - 3000:3000
