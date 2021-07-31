@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
           .currentUser.getIdToken(true)
           .then((token) => {
             const data = JSON.stringify({ name: username });
-            axios.post('http://127.0.0.1:5000/create-user', data, {
+            axios.post('http://127.0.0.1:5000/user', data, {
               headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
