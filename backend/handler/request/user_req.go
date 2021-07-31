@@ -3,7 +3,7 @@ package request
 import "github.com/go-playground/validator/v10"
 
 type CreateUser struct {
-	Name string `json:"name" validate:"required"`
+	Name string `json:"name"`
 }
 
 func (c *CreateUser) Validate() error {

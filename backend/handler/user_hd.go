@@ -20,6 +20,9 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	request := new(request.CreateUser)
+	if request.Name == "" {
+		request.Name = "username"
+	}
 	if err := c.BodyParser(request); err != nil {
 		return c.SendStatus(400)
 	}
