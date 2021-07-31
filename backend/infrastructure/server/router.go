@@ -9,6 +9,7 @@ import (
 
 func SetRouter(app *fiber.App) *fiber.App {
 	middleware.SetAppMiddleware(app)
+	authMiddleware := middleware.SetAuthMiddleware()
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
@@ -24,7 +25,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 
 	userHandler := injector.InjectUserHandler()
 
-	user := app.Group("/user", middleware.AuthMiddleware)
+	user := app.Group("/user", authMiddleware)
 	user.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message": "Private",
