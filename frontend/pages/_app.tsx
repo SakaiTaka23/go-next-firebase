@@ -1,8 +1,11 @@
 import { createMuiTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@material-ui/core';
+import axios from 'axios';
 import { AppProps } from 'next/app';
 import { useEffect, useMemo } from 'react';
 import { AuthProvider } from '../hooks/firebase/useFirebase';
 import '../styles/globals.css';
+
+axios.defaults.baseURL = 'http://127.0.0.1:5000';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
