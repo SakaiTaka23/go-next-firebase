@@ -32,7 +32,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 		})
 	})
 
-	user.Post("/user", userHandler.CreateUser)
+	user.Post("/", userHandler.CreateUser)
 
 	return app
 }
