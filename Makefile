@@ -5,23 +5,26 @@ UP = $(COMPOSE) up
 RUN_BACK = $(COMPOSE) run back
 RUN_FRONT = $(COMPOSE) run front
 
-up:
+up: ## コンテナ全てを立ち上げ
 	$(UP)
-back:
+back: ## backendコンテナのみ立ち上げ
 	$(UP) back
-front:
+front: ## frontendコンテナのみ立ち上げ
 	$(UP) front
-db:
+db: ## DBコンテナのみ立ち上げ
 	$(UP) db
-build:
+build: ## コンテナbuild
 	$(COMPOSE) build
 
-.env:
+.env: ## .envファイルコピー
 	cp .env.example .env
-yarn_install:
+yarn_install: ## yarn install
 	$(RUN_FRONT) yarn install
-tidy:
+tidy: ## go mod tidy
 	$(RUN_BACK) go mod tidy
 
-mysql:
+mysql: ## DBコンテナに入る
 	docker-compose exec db bash -c 'mysql -u $(DB_USERNAME) -p$(DB_PASSWORD) $(DB_DATABASE)'
+
+help: ## help
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
