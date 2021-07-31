@@ -4,6 +4,8 @@ import (
 	"backend/entity/model"
 	"context"
 	"fmt"
+	"os"
+	"strconv"
 	"strings"
 
 	firebase "firebase.google.com/go"
@@ -11,7 +13,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func AuthMiddleware(c *fiber.Ctx) error {
+func authMiddleware(c *fiber.Ctx) error {
 	credentialFilePath := "./firebase-adminsdk.json"
 
 	opt := option.WithCredentialsFile(credentialFilePath)
@@ -40,4 +42,27 @@ func AuthMiddleware(c *fiber.Ctx) error {
 	c.Locals("user", user)
 
 	return c.Next()
+}
+
+func authMiddlewareDebug(c *fiber.Ctx) error {
+	id := c.Get("debug-id", "6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+	user := model.User{
+		ID: id,
+	}
+	c.Locals("user", user)
+
+	return c.Next()
+}
+
+func SetAuthMiddleware() func(*fiber.Ctx) error {
+	// デバッグ・本番時で使い分ける
+	var middleware func(c *fiber.Ctx) error
+	authDebug, _ := strconv.ParseBool(os.Getenv("AUTH_DEBUG"))
+	fmt.Printf("Auth Debug Mode : %t", authDebug)
+	if authDebug {
+		middleware = authMiddlewareDebug
+	} else {
+		middleware = authMiddleware
+	}
+	return middleware
 }
