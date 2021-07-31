@@ -1,0 +1,74 @@
+openapi: 3.1.0
+info:
+  title: go-react-firebase
+  version: '1.0'
+  summary: summary
+  description: description
+servers:
+  - url: 'http://localhost:5000'
+paths:
+  /user:
+    post:
+      summary: Create New User
+      operationId: post-user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+              required:
+                - name
+              x-examples:
+                example-1:
+                  name: string
+            examples:
+              example-1:
+                value:
+                  name: string
+        description: |-
+          名前のみ受付
+          idに関してはトークンから取得
+      description: ユーザーの新規登録
+      security:
+        - firebase auth: []
+      responses:
+        '200':
+          description: ユーザー作成完了
+        '400':
+          description: Bad Request
+components:
+  schemas:
+    User:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: string
+          name: string
+      examples:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          name: string
+      properties:
+        id:
+          type: string
+          minLength: 1
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+      required:
+        - id
+        - name
+  securitySchemes:
+    firebase auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: ''
+          refreshUrl: ''
+          scopes: {}
