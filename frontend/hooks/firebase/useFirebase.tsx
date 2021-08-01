@@ -1,8 +1,10 @@
 import firebase from './firebase';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const useFirebase = () => {
   const firebaseAuth = firebase.auth();
+  const router = useRouter();
 
   const Logout = () => {
     firebaseAuth.signOut().then(() => {
@@ -30,6 +32,7 @@ const useFirebase = () => {
                 Authorization: `Bearer ${token}`,
               },
             });
+            router.replace('/private');
           });
       })
       .catch((error) => {
