@@ -1,47 +1,8 @@
 import firebase from './firebase';
-import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-type AuthContextState = {
-  user: firebase.User;
-  isLoading: boolean;
-  firebaseAuth: firebase.auth.Auth;
-  Logout: () => void;
-  Signup: (email: string, password: string, username: string) => Promise<void>;
-  Signin: (email: string, password: string) => Promise<void>;
-};
-
-const AuthContext = createContext({} as AuthContextState);
-
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState<firebase.User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+const useFirebase = () => {
   const firebaseAuth = firebase.auth();
-  const firebaseUser = () => {
-    return firebase.auth().currentUser;
-  };
-
-  useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-      setIsLoading(false);
-    });
-    return () => unsubscribe();
-  }, [firebaseAuth]);
-
-  useEffect(() => {
-    const setToken = async () => {
-      const token = await firebaseUser()?.getIdToken();
-      if (token !== undefined) {
-        localStorage.setItem('token', token);
-      }
-    };
-    setToken();
-  }, [firebaseUser]);
 
   const Logout = () => {
     firebaseAuth.signOut().then(() => {
@@ -49,7 +10,7 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const Signup = async (email: string, password: string, username: string) => {
+  const SignUp = async (email: string, password: string, username: string) => {
     await firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
@@ -84,17 +45,18 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const Signin = async (email: string, password: string) => {
+  const SignIn = async (email: string, password: string) => {
     await firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
       alert(error);
     });
   };
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading, firebaseAuth, Logout, Signup, Signin }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return {
+    firebase,
+    Logout,
+    SignUp,
+    SignIn,
+  };
 };
 
-export { AuthContext, AuthProvider, firebase };
+export { useFirebase };
