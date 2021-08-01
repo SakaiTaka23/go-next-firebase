@@ -1,9 +1,7 @@
 import React from 'react';
-import useRequiredLogin from '../hooks/firebase/useRequiredLogin';
 
-const privatefc = () => {
-  useRequiredLogin();
+const privateFC = () => {
   return <div>private page</div>;
 };
 
-export default privatefc;
+export default privateFC;

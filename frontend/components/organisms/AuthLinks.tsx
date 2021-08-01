@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React, { useContext } from 'react';
+import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { AuthContext, firebase } from '../../hooks/firebase/useFirebase';
+import { useFirebase } from '../../hooks/firebase/useFirebase';
 
 const AuthLinks = () => {
-  const { firebaseAuth } = useContext(AuthContext);
+  const { firebase } = useFirebase();
   const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/private',
@@ -33,7 +33,7 @@ const AuthLinks = () => {
     },
   };
 
-  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebaseAuth} />;
+  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />;
 };
 
 export default AuthLinks;
