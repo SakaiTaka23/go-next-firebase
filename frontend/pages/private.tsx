@@ -1,9 +1,12 @@
-import React from 'react';
-import useRequiredLogin from '../hooks/firebase/useRequiredLogin';
+import React, { useContext } from 'react';
+import { AuthContext } from '../hooks/firebase/authContext';
 
-const privatefc = () => {
-  useRequiredLogin();
+const privateFC = () => {
+  const { user } = useContext(AuthContext);
+  if (!user) {
+    return <div>you are not logged in</div>;
+  }
   return <div>private page</div>;
 };
 
-export default privatefc;
+export default privateFC;

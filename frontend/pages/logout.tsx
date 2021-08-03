@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../hooks/firebase/useFirebase';
-import useRequiredLogin from '../hooks/firebase/useRequiredLogin';
+import React from 'react';
+import { useFirebase } from '../hooks/firebase/useFirebase';
 
 const logout = () => {
-  useRequiredLogin();
-  const { Logout } = useContext(AuthContext);
+  const { Logout } = useFirebase();
 
   return (
     <div>

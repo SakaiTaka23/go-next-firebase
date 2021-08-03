@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Avatar, Container, makeStyles, Typography } from '@material-ui/core';
 import { FormProvider, useForm } from 'react-hook-form';
 import EmailInput from '../input/EmailInput';
 import PasswordInput from '../input/PassowrdInput';
 import SubmitButton from '../../molecules/SubmitButton';
-import { AuthContext } from '../../../hooks/firebase/useFirebase';
+import { useFirebase } from '../../../hooks/firebase/useFirebase';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,14 +32,13 @@ type MailPasswordRequest = {
   password: string;
 };
 
-const SigninForm = () => {
+const SignInForm = () => {
   const classes = useStyles();
   const methods = useForm();
-  const { Signin } = useContext(AuthContext);
+  const { SignIn } = useFirebase();
 
   const submit = (data: MailPasswordRequest) => {
-    console.log(data);
-    Signin(data.email, data.password);
+    SignIn(data.email, data.password);
   };
 
   return (
@@ -63,4 +62,4 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+export default SignInForm;
