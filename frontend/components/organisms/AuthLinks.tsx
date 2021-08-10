@@ -1,10 +1,11 @@
-import axios from 'axios';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import useCreateUser from '../../hooks/api/user/useCreateUser';
 import { useFirebase } from '../../hooks/firebase/useFirebase';
 
 const AuthLinks = () => {
   const { firebase } = useFirebase();
+  const { createUser } = useCreateUser();
   const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/private',
@@ -12,22 +13,14 @@ const AuthLinks = () => {
     callbacks: {
       signInSuccessWithAuthResult: (authResult) => {
         const isNewUser = authResult.additionalUserInfo.isNewUser;
-        firebase
-          .auth()
-          .currentUser.getIdToken()
-          .then((token) => {
-            if (isNewUser) {
-              console.log(token);
-              const data = {};
-              axios.post('user', data, {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-              });
-            }
-          });
-
+        if (isNewUser) {
+          firebase
+            .auth()
+            .currentUser.getIdToken()
+            .then((token) => {
+              createUser(token);
+            });
+        }
         return false;
       },
     },

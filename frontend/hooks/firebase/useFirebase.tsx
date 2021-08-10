@@ -1,10 +1,11 @@
 import firebase from './firebase';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import useCreateUser from '../api/user/useCreateUser';
 
 const useFirebase = () => {
   const firebaseAuth = firebase.auth();
   const router = useRouter();
+  const { createUser, error } = useCreateUser();
 
   const Logout = () => {
     firebaseAuth.signOut().then(() => {
@@ -26,25 +27,14 @@ const useFirebase = () => {
           .currentUser.getIdToken(true)
           .then((token) => {
             const data = JSON.stringify({ name: username });
-            axios.post('user', data, {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            });
+            createUser(token, data);
+            if (error) {
+              alert(error.message);
+              return;
+            }
+            console.log(error);
             router.replace('/private');
           });
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (errorCode == 'auth/weak-password') {
-          alert('The password is too weak.');
-        } else {
-          alert(errorMessage);
-        }
-        console.log(error);
       });
   };
 
