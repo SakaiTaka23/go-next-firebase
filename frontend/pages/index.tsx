@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import useSWR from 'swr';
-import axiosInstance from '../hooks/api/axios';
+import { axiosInstance } from '../hooks/api/axios';
 import { AuthContext } from '../hooks/firebase/authContext';
 import { useFirebase } from '../hooks/firebase/useFirebase';
 
