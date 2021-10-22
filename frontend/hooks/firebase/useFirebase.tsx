@@ -1,9 +1,10 @@
-import firebase from './firebase';
 import { useRouter } from 'next/router';
 import useCreateUser from '../api/user/useCreateUser';
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from '@firebase/auth';
+import firebaseApp from './firebase';
 
 const useFirebase = () => {
-  const firebaseAuth = firebase.auth();
+  const firebaseAuth = getAuth(firebaseApp);
   const router = useRouter();
   const { createUser, error } = useCreateUser();
 
@@ -14,38 +15,34 @@ const useFirebase = () => {
   };
 
   const SignUp = async (email: string, password: string, username: string) => {
-    await firebaseAuth
-      .createUserWithEmailAndPassword(email, password)
+    await createUserWithEmailAndPassword(firebaseAuth, email, password)
       .then((result) => {
-        result.user.updateProfile({
+        updateProfile(result.user, {
           displayName: username,
         });
       })
       .then(() => {
-        firebase
-          .auth()
-          .currentUser.getIdToken(true)
-          .then((token) => {
-            const data = JSON.stringify({ name: username });
-            createUser(token, data);
-            if (error) {
-              alert(error.message);
-              return;
-            }
-            console.log(error);
-            router.replace('/private');
-          });
+        firebaseAuth.currentUser.getIdToken(true).then((token) => {
+          const data = JSON.stringify({ name: username });
+          createUser(token, data);
+          if (error) {
+            alert(error.message);
+            return;
+          }
+          console.log(error);
+          router.replace('/private');
+        });
       });
   };
 
   const SignIn = async (email: string, password: string) => {
-    await firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
+    await signInWithEmailAndPassword(firebaseAuth, email, password).catch((error) => {
       alert(error);
     });
   };
 
   return {
-    firebase,
+    firebaseAuth,
     Logout,
     SignUp,
     SignIn,

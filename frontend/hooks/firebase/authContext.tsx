@@ -1,19 +1,21 @@
+import { getAuth, onAuthStateChanged, User } from '@firebase/auth';
 import { createContext, useEffect, useState } from 'react';
-import firebase from './firebase';
+import firebaseApp from './firebase';
 
 type AuthContextState = {
   token: string;
-  user: firebase.User;
+  user: User;
 };
 
 const AuthContext = createContext({} as AuthContextState);
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState<firebase.User>();
+  const firebaseAuth = getAuth(firebaseApp);
+  const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>('');
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    onAuthStateChanged(firebaseAuth, (user) => {
       setUser(user);
       if (user) {
         user.getIdToken().then((idToken) => {
