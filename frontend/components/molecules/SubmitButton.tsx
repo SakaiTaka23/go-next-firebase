@@ -1,17 +1,9 @@
-import { Button, makeStyles } from '@material-ui/core';
 import React from 'react';
-
-const useStyles = makeStyles((theme) => ({
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { Button } from '@mui/material';
 
 const SubmitButton = () => {
-  const classes = useStyles();
-
   return (
-    <Button type='submit' variant='contained' color='primary' fullWidth className={classes.submit}>
+    <Button type='submit' color='primary' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
       submit
     </Button>
   );

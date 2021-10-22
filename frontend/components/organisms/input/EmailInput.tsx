@@ -1,5 +1,5 @@
-import { TextField } from '@material-ui/core';
 import React from 'react';
+import { TextField } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 
 const EmailInput = () => {
@@ -7,7 +7,6 @@ const EmailInput = () => {
 
   return (
     <TextField
-      variant='outlined'
       margin='normal'
       placeholder='Email Address *'
       fullWidth
