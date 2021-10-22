@@ -1,4 +1,4 @@
-import { createMuiTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@material-ui/core';
+import { createTheme, CssBaseline, ThemeProvider, StyledEngineProvider, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import { AppProps } from 'next/app';
 import { useEffect, useMemo } from 'react';
@@ -12,9 +12,9 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
+          mode: prefersDarkMode ? 'dark' : 'light',
         },
       }),
     [prefersDarkMode]
@@ -28,12 +28,14 @@ const App = ({ Component, pageProps }: AppProps) => {
     }
   }, []);
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <Component {...pageProps} />
-      </AuthProvider>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 
