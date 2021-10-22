@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import React, { useContext } from 'react';
 import useSWR from 'swr';
 import { axiosInstance } from '../hooks/api/axios';
@@ -8,7 +9,7 @@ const Index = () => {
   const { user } = useContext(AuthContext);
   const { Logout } = useFirebase();
 
-  const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
+  const fetcher = (url: string) => axiosInstance.get(url).then((res: AxiosResponse<any>) => res.data);
   const { data } = useSWR('/', fetcher);
 
   return (
