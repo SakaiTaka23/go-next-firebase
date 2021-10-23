@@ -29,4 +29,5 @@ FROM alpine:3.13.6 as production
 COPY --from=builder /bin/app .
 
 EXPOSE 5000
+
 CMD ["./app"]
