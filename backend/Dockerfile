@@ -26,7 +26,7 @@ RUN CGO_ENABLED=0 go build -o /bin/app
 
 
 FROM alpine:3.13.6 as production
-COPY --from=builder /bin/app /bin/app
+COPY --from=builder /bin/app .
 
 EXPOSE 5000
-CMD ["/bin/app"]
+CMD ["./app"]
