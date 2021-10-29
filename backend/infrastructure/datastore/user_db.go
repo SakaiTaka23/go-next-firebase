@@ -15,9 +15,9 @@ func NewUserRepository(sqlHandler mysql.MySQLHandler) repository.UserRepository 
 	return &userRepository
 }
 
-func (userRepo *UserRepository) CreateUser(user *model.User) string {
-	userRepo.MySQLHandler.Conn.Create(&user)
-	return user.ID
+func (userRepo *UserRepository) CreateUser(user *model.User) error {
+	err := userRepo.MySQLHandler.Conn.Where(model.User{ID: user.ID}).Attrs(model.User{Name: user.Name}).FirstOrCreate(&user).Error
+	return err
 }
 
 func (userRepo *UserRepository) DeleteUser(id string) {

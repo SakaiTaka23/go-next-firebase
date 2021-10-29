@@ -6,7 +6,7 @@ import (
 )
 
 type UserUsecase interface {
-	CreateUser(user *model.User)
+	CreateUser(user *model.User) error
 }
 
 type userUsecase struct {
@@ -18,6 +18,6 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	return &userUsecase
 }
 
-func (usecase *userUsecase) CreateUser(user *model.User) {
-	usecase.userRepo.CreateUser(user)
+func (usecase *userUsecase) CreateUser(user *model.User) error {
+	return usecase.userRepo.CreateUser(user)
 }
