@@ -1,6 +1,14 @@
 import { useRouter } from 'next/router';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from 'firebase/auth';
 import useCreateUser from '../api/user/useCreateUser';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from '@firebase/auth';
 import firebaseApp from './firebase';
 
 const useFirebase = () => {
@@ -41,11 +49,29 @@ const useFirebase = () => {
     });
   };
 
+  const SignInGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(firebaseAuth, provider)
+      .then(() => {
+        onAuthStateChanged(firebaseAuth, (user) => {
+          user.getIdToken(true).then((token) => {
+            console.log(`token ${token}`);
+            createUser(token);
+            router.replace('/private');
+          });
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return {
     firebaseAuth,
     Logout,
     SignUp,
     SignIn,
+    SignInGoogle,
   };
 };
 
