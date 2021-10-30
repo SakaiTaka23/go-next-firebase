@@ -1,13 +1,9 @@
-FROM node:15.13.0-alpine3.10 as dev
+FROM node:16-alpine AS dev
 
 WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
-COPY tsconfig.json .
-
-RUN yarn install
 COPY . .
+RUN yarn install
 
 EXPOSE 3000
 
