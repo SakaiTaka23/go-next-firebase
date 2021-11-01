@@ -10,10 +10,7 @@ import (
 
 func main() {
 	mysql.Connect()
-
-	if err := logger.SetUp(); err != nil {
-		panic(err)
-	}
+	logger.CreateLogger()
 
 	app := fiber.New()
 	server.SetRouter(app)
